@@ -160,6 +160,18 @@ describe('agents/copywriter', () => {
       expect(result.success).toBe(true)
     })
 
+    it('should handle null message content from OpenAI (uses "{}" fallback)', async () => {
+      getMockCreate().mockResolvedValueOnce({
+        choices: [{ message: { content: null } }],
+      })
+
+      // content?.trim() → undefined → ?? '{}' fires → JSON.parse('{}') = {}
+      const result = await copywriterAgent(baseInput, basePlan)
+
+      // {} lacks required SiteContent fields, so it parses successfully but is empty
+      expect(result.success).toBe(true)
+    })
+
     it('should call OpenAI with a prompt containing business name and niche', async () => {
       getMockCreate().mockResolvedValueOnce({
         choices: [{ message: { content: validContentJSON } }],

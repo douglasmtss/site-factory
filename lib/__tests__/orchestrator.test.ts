@@ -325,5 +325,16 @@ describe('lib/orchestrator', () => {
 
       expect(result.site?.status).toBe('published')
     })
+
+    it('should use NEXT_PUBLIC_BASE_URL in fallback URL when deployAgent fails and env is set', async () => {
+      const originalEnv = process.env.NEXT_PUBLIC_BASE_URL
+      process.env.NEXT_PUBLIC_BASE_URL = 'https://meusite.com'
+      mockDeployAgent.mockResolvedValue({ success: false, error: 'Vercel error' })
+
+      const result = await createSite(defaultInput)
+
+      expect(result.url).toContain('https://meusite.com')
+      process.env.NEXT_PUBLIC_BASE_URL = originalEnv
+    })
   })
 })

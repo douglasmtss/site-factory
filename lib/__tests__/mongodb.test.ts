@@ -99,4 +99,39 @@ describe('lib/mongodb', () => {
       )
     })
   })
+
+  describe('module-level initialization branches', () => {
+    it('should reuse global.mongooseCache when already set before module loads', () => {
+      // Set a pre-existing cache so the ??-fallback on line 18 takes the truthy side
+      // and the if (!global.mongooseCache) on line 20 is false
+      const preExisting = { conn: null, promise: null }
+      ;(global as Record<string, unknown>)['mongooseCache'] = preExisting
+
+      jest.resetModules()
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const freshModule = require('@/lib/mongodb') as typeof import('@/lib/mongodb')
+      const freshConnectMongo = freshModule.connectMongo
+
+      // The module used the pre-existing cache, so global.mongooseCache stays the same object
+      expect((global as Record<string, unknown>)['mongooseCache']).toBe(preExisting)
+      expect(freshConnectMongo).toBeDefined()
+    })
+
+    it('should use MONGODB_URI env var when set at module load time', () => {
+      const originalUri = process.env.MONGODB_URI
+      process.env.MONGODB_URI = 'mongodb://custom-host:27017/test-db'
+
+      // Reset the global cache so the module initializes fresh
+      ;(global as Record<string, unknown>)['mongooseCache'] = undefined
+      jest.resetModules()
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const freshModule2 = require('@/lib/mongodb') as typeof import('@/lib/mongodb')
+      const freshConnectMongo = freshModule2.connectMongo
+
+      expect(freshConnectMongo).toBeDefined()
+
+      process.env.MONGODB_URI = originalUri
+      ;(global as Record<string, unknown>)['mongooseCache'] = undefined
+    })
+  })
 })

@@ -1,5 +1,6 @@
 import { codeAgent } from '@/agents/code'
 import type { SiteContent, SiteDesign } from '@/types'
+import * as whatsappModule from '@/skills/whatsapp'
 
 const mockContent: SiteContent = {
   title: 'Barbearia do João',
@@ -153,6 +154,15 @@ describe('agents/code', () => {
       expect(result.data?.html).toContain(
         '<title>Barbearia do João — Copacabana RJ | Atendimento via WhatsApp</title>'
       )
+    })
+
+    it('should return success: false when an internal error is thrown', () => {
+      jest.spyOn(whatsappModule, 'buildWhatsAppLink').mockImplementationOnce(() => {
+        throw new Error('whatsapp error')
+      })
+      const result = codeAgent(mockContent, mockDesign, '5521999999999', 'test-slug')
+      expect(result.success).toBe(false)
+      expect(result.error).toBeDefined()
     })
   })
 })

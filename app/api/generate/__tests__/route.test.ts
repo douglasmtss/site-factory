@@ -161,6 +161,20 @@ describe('app/api/generate/route', () => {
       )
     })
 
+    it('should handle undefined site in success response gracefully', async () => {
+      mockCreateSite.mockResolvedValueOnce({
+        success: true,
+        url: 'https://test.vercel.app',
+        site: undefined,
+      })
+
+      await POST(createMockRequest({ business: 'Barbearia', city: 'RJ' }))
+
+      const [responseBody] = mockNextResponseJson.mock.calls[0]
+      expect(responseBody.success).toBe(true)
+      expect(responseBody.slug).toBeUndefined()
+    })
+
     it('should pass the full request body to createSite', async () => {
       mockCreateSite.mockResolvedValueOnce({ success: true, url: 'http://x', site: { slug: 's' } })
       const body = { business: 'Barbearia', city: 'RJ', neighborhood: 'Copacabana', whatsapp: '553299999' }

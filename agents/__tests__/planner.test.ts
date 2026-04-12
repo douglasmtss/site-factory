@@ -290,6 +290,40 @@ describe('agents/planner', () => {
       expect(result.data?.colorScheme?.primary).toBeDefined()
     })
 
+    it('should use "{}" fallback when OpenAI returns null message content', async () => {
+      getMockCreate().mockResolvedValueOnce({
+        choices: [{ message: { content: null } }],
+      })
+
+      // content?.trim() → undefined → ?? '{}' fires → JSON.parse('{}') = {}
+      // then colorScheme fallback and sections fallback both trigger
+      const result = await plannerAgent(baseInput)
+
+      expect(result.success).toBe(true)
+      expect(result.data?.sections).toBeDefined()
+      expect(result.data?.sections?.length).toBeGreaterThan(0)
+    })
+
+    it('should use nicheSections.default when niche has no sections mapping and sections is empty', async () => {
+      // 'Odontologia' is in NICHE_MAP but NOT in nicheSections → triggers nicheSections.default
+      const planUnknownSections = JSON.stringify({
+        pages: ['home'],
+        sections: [],
+        tone: 'moderno',
+        keywords: [],
+        niche: 'Odontologia',
+        colorScheme: {},
+      })
+      getMockCreate().mockResolvedValueOnce({
+        choices: [{ message: { content: planUnknownSections } }],
+      })
+
+      const result = await plannerAgent({ ...baseInput, business: 'Dentista Sorriso' })
+
+      expect(result.success).toBe(true)
+      expect(result.data?.sections).toEqual(expect.arrayContaining(['hero']))
+    })
+
     it('should use default niche colorScheme when niche is not in map', async () => {
       const planUnknownNiche = JSON.stringify({
         pages: ['home'],

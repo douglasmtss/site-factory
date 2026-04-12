@@ -82,6 +82,19 @@ describe('skills/whatsapp', () => {
       const link = buildWhatsAppLink(input)
       expect(link).toContain('text=')
     })
+
+    it('should fall back to contato message when context is an unknown string', () => {
+      const input = {
+        number: '5521999999999',
+        businessName: 'Test',
+        niche: 'Test',
+        context: 'unknown_context',
+      } as unknown as WhatsAppInput
+      const link = buildWhatsAppLink(input)
+      const decoded = decodeURIComponent(link.split('text=')[1])
+      // Falls back to contextMessages.contato
+      expect(decoded).toContain('informações')
+    })
   })
 
   describe('buildWhatsAppButton', () => {
@@ -135,6 +148,18 @@ describe('skills/whatsapp', () => {
       }
       const button = buildWhatsAppButton(input)
       expect(button.label).toBeTruthy()
+    })
+
+    it('should use final fallback label when context has no labelMap entry', () => {
+      const input = {
+        number: '5521999999999',
+        businessName: 'Test',
+        niche: 'Test',
+        context: 'unknown_context',
+      } as unknown as WhatsAppInput
+      const button = buildWhatsAppButton(input)
+      // labelMap['unknown_context'] is undefined → ?? '💬 Falar pelo WhatsApp' fires
+      expect(button.label).toBe('💬 Falar pelo WhatsApp')
     })
   })
 

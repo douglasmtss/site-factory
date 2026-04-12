@@ -129,5 +129,51 @@ describe('agents/ui', () => {
       // When primary is empty/falsy, keeps original niche design
       expect(result.data?.primaryColor).toBe('#1a1a2e')
     })
+
+    it('should not override design when plan.colorScheme is null/undefined', () => {
+      const plan: SitePlan = {
+        pages: ['home'],
+        sections: ['hero'],
+        tone: 'modern',
+        keywords: [],
+        niche: 'Barbearia',
+        colorScheme: undefined as unknown as SitePlan['colorScheme'],
+      }
+      const result = uiAgent(plan)
+      // colorScheme?.primary → undefined → block skipped → keeps niche default
+      expect(result.success).toBe(true)
+      expect(result.data?.primaryColor).toBeDefined()
+    })
+
+    it('should fall back to existing design.style when plan.colorScheme.style is undefined', () => {
+      const plan: SitePlan = {
+        pages: ['home'],
+        sections: ['hero'],
+        tone: 'modern',
+        keywords: [],
+        niche: 'Barbearia',
+        colorScheme: {
+          primary: '#ff0000',
+          secondary: '#00ff00',
+          style: undefined as unknown as string,
+        },
+      }
+      const result = uiAgent(plan)
+      // plan.colorScheme.style is undefined → ?? design.style fallback fires
+      expect(result.success).toBe(true)
+      expect(result.data?.style).toBeDefined()
+    })
+
+    it('should return success: false when an error is thrown internally', () => {
+      const throwingPlan = new Proxy({} as SitePlan, {
+        get: (_target, prop) => {
+          if (prop === 'niche') throw new Error('Simulated internal error')
+          return undefined
+        },
+      })
+      const result = uiAgent(throwingPlan)
+      expect(result.success).toBe(false)
+      expect(result.error).toBeDefined()
+    })
   })
 })

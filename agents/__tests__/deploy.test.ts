@@ -190,6 +190,18 @@ describe('agents/deploy', () => {
       expect(result.data?.url).toContain('vercel.app')
     })
 
+    it('should use fallback Vercel URL when response.data is null', async () => {
+      process.env.VERCEL_TOKEN = 'vercel_test_token'
+      mockAxiosPost.mockResolvedValueOnce({ data: null })
+      mockEnsureDir.mockResolvedValue(undefined)
+      mockWriteFile.mockResolvedValue(undefined)
+
+      const result = await deployVercel(SAMPLE_HTML, SAMPLE_SLUG)
+
+      expect(result.data?.url).toContain(SAMPLE_SLUG)
+      expect(result.data?.url).toContain('vercel.app')
+    })
+
     it('should return provider "vercel" when Vercel deploy succeeds', async () => {
       process.env.VERCEL_TOKEN = 'vercel_test_token'
       mockAxiosPost.mockResolvedValueOnce({ data: { url: 'my-site.vercel.app' } })
