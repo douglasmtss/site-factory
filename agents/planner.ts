@@ -4,7 +4,9 @@
 import OpenAI from 'openai'
 import type { BusinessInput, SitePlan, AgentResult } from '@/types'
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+// apiKey falls back to a placeholder so the constructor doesn't throw during
+// Next.js build-time module evaluation when the env var is not set.
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY ?? 'build-placeholder' })
 
 const NICHE_MAP: Record<string, string> = {
   hamburgueria: 'Hamburgueria',

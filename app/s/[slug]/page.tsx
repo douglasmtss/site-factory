@@ -8,14 +8,15 @@ import type { Metadata } from 'next'
 import type { GeneratedSite } from '@/types'
 
 interface Props {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 type SiteDoc = GeneratedSite & { _id: unknown }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
   await connectMongo()
-  const site = await Site.findOne({ slug: params.slug }).lean() as SiteDoc | null
+  const site = await Site.findOne({ slug }).lean() as SiteDoc | null
 
   if (!site) {
     return { title: 'Site não encontrado' }
@@ -29,9 +30,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function SitePage({ params }: Props) {
+  const { slug } = await params
   await connectMongo()
 
-  const site = await Site.findOne({ slug: params.slug }).lean() as SiteDoc | null
+  const site = await Site.findOne({ slug }).lean() as SiteDoc | null
 
   if (!site) {
     notFound()

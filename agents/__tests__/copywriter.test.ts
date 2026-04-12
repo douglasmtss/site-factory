@@ -185,3 +185,27 @@ describe('agents/copywriter', () => {
     })
   })
 })
+
+describe('agents/copywriter — module initialization branch', () => {
+  it('should pass OPENAI_API_KEY directly when the env var is set (covers ?? left branch)', () => {
+    const original = process.env.OPENAI_API_KEY
+    process.env.OPENAI_API_KEY = 'real-test-key'
+
+    jest.resetModules()
+    // Re-register the OpenAI mock for the fresh module load
+    jest.mock('openai', () => jest.fn().mockImplementation(() => ({
+      chat: { completions: { create: jest.fn() } },
+    })))
+
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const OpenAIFresh = require('openai') as jest.Mock
+    // Importing the agent forces module-level `new OpenAI(...)` to run
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    require('@/agents/copywriter')
+
+    const callArg = OpenAIFresh.mock.calls[0]?.[0] as { apiKey?: string } | undefined
+    expect(callArg?.apiKey).toBe('real-test-key')
+
+    process.env.OPENAI_API_KEY = original
+  })
+})

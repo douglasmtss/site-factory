@@ -6,7 +6,9 @@ import type { BusinessInput, SitePlan, SiteContent, AgentResult } from '@/types'
 import { buildSeoPromptInstructions, buildSeoKeywords } from '@/skills/seo'
 import { buildConversionPromptInstructions } from '@/skills/conversion'
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+// apiKey falls back to a placeholder so the constructor doesn't throw during
+// Next.js build-time module evaluation when the env var is not set.
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY ?? 'build-placeholder' })
 
 export async function copywriterAgent(
   input: BusinessInput,
