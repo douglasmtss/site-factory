@@ -21,7 +21,6 @@
     "lucide-react": "^0.414.0",
     "mongoose": "^8.5.2",
     "next": "^15.3.0",
-    "openai": "^4.52.0",
     "react": "^18",
     "react-dom": "^18",
     "slugify": "^1.6.6",

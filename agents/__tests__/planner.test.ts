@@ -1,5 +1,5 @@
 // ts-jest does not apply babel-jest's `mock*` variable hoisting exception.
-// Access the mock create fn via the OpenAI mock instance after module load.
+// Access the mock create fn via the Groq mock instance after module load.
 jest.mock('groq-sdk', () =>
   jest.fn().mockImplementation(() => ({
     chat: {
@@ -165,7 +165,7 @@ describe('agents/planner', () => {
   })
 
   describe('plannerAgent', () => {
-    it('should return success with a valid plan when OpenAI responds correctly', async () => {
+    it('should return success with a valid plan when Groq responds correctly', async () => {
       getMockCreate().mockResolvedValueOnce({
         choices: [{ message: { content: validPlanJSON } }],
       })
@@ -189,7 +189,7 @@ describe('agents/planner', () => {
       expect(result.data?.niche).toBe('Barbearia')
     })
 
-    it('should use fallback sections when OpenAI returns plan without sections', async () => {
+    it('should use fallback sections when Groq returns plan without sections', async () => {
       const noSectionsJSON = JSON.stringify({
         pages: ['home'],
         sections: [],
@@ -208,7 +208,7 @@ describe('agents/planner', () => {
       expect(result.data?.sections.length).toBeGreaterThan(0)
     })
 
-    it('should use fallback colorScheme when OpenAI returns plan without colorScheme', async () => {
+    it('should use fallback colorScheme when Groq returns plan without colorScheme', async () => {
       const noColorJSON = JSON.stringify({
         pages: ['home'],
         sections: ['hero'],
@@ -227,7 +227,7 @@ describe('agents/planner', () => {
       expect(result.data?.colorScheme?.primary).toBeDefined()
     })
 
-    it('should handle OpenAI response wrapped in markdown code block', async () => {
+    it('should handle Groq response wrapped in markdown code block', async () => {
       getMockCreate().mockResolvedValueOnce({
         choices: [{ message: { content: `\`\`\`json\n${validPlanJSON}\n\`\`\`` } }],
       })
@@ -238,8 +238,8 @@ describe('agents/planner', () => {
       expect(result.data).toBeDefined()
     })
 
-    it('should return success: false when OpenAI throws an error', async () => {
-      getMockCreate().mockRejectedValueOnce(new Error('OpenAI API error'))
+    it('should return success: false when Groq throws an error', async () => {
+      getMockCreate().mockRejectedValueOnce(new Error('Groq API error'))
 
       const result = await plannerAgent(baseInput)
 
@@ -247,7 +247,7 @@ describe('agents/planner', () => {
       expect(result.error).toBeDefined()
     })
 
-    it('should return success: false when OpenAI returns invalid JSON', async () => {
+    it('should return success: false when Groq returns invalid JSON', async () => {
       getMockCreate().mockResolvedValueOnce({
         choices: [{ message: { content: 'not valid json {{{' } }],
       })
@@ -290,7 +290,7 @@ describe('agents/planner', () => {
       expect(result.data?.colorScheme?.primary).toBeDefined()
     })
 
-    it('should use "{}" fallback when OpenAI returns null message content', async () => {
+    it('should use "{" fallback when Groq returns null message content', async () => {
       getMockCreate().mockResolvedValueOnce({
         choices: [{ message: { content: null } }],
       })

@@ -36,7 +36,7 @@ Acessível em /s/{slug}
 ### Stack
 
 - **Framework:** Next.js 15 (App Router)
-- **IA:** OpenAI GPT-4o-mini
+- **IA:** Groq (llama-3.3-70b-versatile)
 - **Banco de dados:** MongoDB + Mongoose
 - **Bot:** Telegraf (Telegram)
 - **CSS:** Tailwind CSS (landing page) + CSS inline (sites gerados)
@@ -50,7 +50,7 @@ Acessível em /s/{slug}
 
 ```env
 # Obrigatório para geração com IA
-OPENAI_API_KEY=sk-...
+GROQ_API_KEY=gsk_...
 
 # Obrigatório para persistência
 MONGODB_URI=mongodb://localhost:27017/site-factory

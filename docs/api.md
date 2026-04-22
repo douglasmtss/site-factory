@@ -213,7 +213,7 @@ Content-Type: application/json
 ## Variáveis de Ambiente Relevantes
 
 ```env
-OPENAI_API_KEY=sk-...           # obrigatório para /api/generate
+GROQ_API_KEY=gsk_...            # obrigatório para /api/generate
 MONGODB_URI=mongodb://...       # obrigatório para todos os endpoints
 TELEGRAM_BOT_TOKEN=...          # obrigatório para /api/telegram
 NEXT_PUBLIC_BASE_URL=https://... # usado na construção da deployUrl

@@ -79,7 +79,7 @@ O núcleo da aplicação. Executa um pipeline sequencial de 8 etapas chamando ag
 
 ### 4. Agentes (`agents/`)
 
-Unidades de computação independentes com responsabilidade única. Alguns usam IA (GPT-4o-mini), outros são puramente determinísticos. Ver [agents.md](./agents.md).
+Unidades de computação independentes com responsabilidade única. Alguns usam IA (Groq llama-3.3-70b-versatile), outros são puramente determinísticos. Ver [agents.md](./agents.md).
 
 ### 5. Skills (`skills/`)
 
@@ -113,7 +113,7 @@ SitePlan {
   colorScheme: { primary: "#1a1a1a", secondary: "#d4af37" }
 }
         │
-        ▼ copywriterAgent  (GPT-4o-mini + skills de SEO e conversão)
+        ▼ copywriterAgent  (Groq llama-3.3-70b + skills de SEO e conversão)
 SiteContent {
   title: "Barbearia do João — Copacabana"
   tagline: "Seu estilo, nossa arte"
@@ -167,7 +167,7 @@ As skills não chamam a IA. Elas geram **strings de instrução** que são injet
 ### Fallbacks em Cascata
 - Planner: se a IA não retornar `colorScheme`, usa mapa local por nicho
 - Deploy: se Vercel falhar, faz deploy local automaticamente
-- OpenAI client: se `OPENAI_API_KEY` não estiver definido, usa `'build-placeholder'` para não quebrar o build
+- Groq client: se `GROQ_API_KEY` não estiver definido, usa `'build-placeholder'` para não quebrar o build
 
 ### Servidor Preferível ao Cliente
 A rota `/s/[slug]` é um Server Component — o HTML do site é renderizado no servidor diretamente do MongoDB, sem JavaScript no cliente.

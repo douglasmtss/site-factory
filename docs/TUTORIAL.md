@@ -28,7 +28,7 @@ Guia completo de uso: do zero até gerar sites em massa e vender pelo WhatsApp.
 ### Pré-requisitos
 - Node.js 20+ (`nvm use 20`)
 - MongoDB rodando localmente **ou** conta no [MongoDB Atlas](https://www.mongodb.com/atlas) (gratuito)
-- Conta OpenAI com créditos (GPT-4o-mini é baratíssimo)
+- Conta Groq (gratuita em console.groq.com)
 
 ### Clonar e instalar
 
@@ -52,9 +52,9 @@ cp .env.example .env
 Abra o `.env` e preencha:
 
 ```env
-# 1. Chave OpenAI — obrigatória para gerar conteúdo
-#    Crie em: https://platform.openai.com/api-keys
-OPENAI_API_KEY=sk-proj-...
+# 1. Chave Groq — obrigatória para gerar conteúdo
+#    Crie em: https://console.groq.com/keys
+GROQ_API_KEY=gsk_...
 
 # 2. Token do bot Telegram — para usar o bot
 #    Crie um bot em: https://t.me/BotFather  → /newbot
@@ -626,7 +626,7 @@ vercel --prod
 No painel da Vercel → seu projeto → Settings → Environment Variables:
 
 ```
-OPENAI_API_KEY         = sk-...
+GROQ_API_KEY           = gsk_...
 TELEGRAM_BOT_TOKEN     = 712...
 MONGODB_URI            = mongodb+srv://...
 WHATSAPP_NUMBER        = 5521999999999
@@ -856,8 +856,8 @@ salão beleza niterói
 
 ## Dúvidas frequentes
 
-**Quanto custa usar o GPT-4o-mini por site?**  
-Cerca de R$0,05 a R$0,10 por site gerado. Muito barato.
+**Quanto custa usar o Groq por site?**  
+Groq oferece um plano gratuito generoso. No plano pago, o custo é mínimo (frações de centavo por site).
 
 **Posso usar sem MongoDB?**  
 Não no estado atual — o orchestrator persiste no Mongo. Mas você pode comentar a parte de persistência no `lib/orchestrator.ts` para testar.

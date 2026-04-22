@@ -75,7 +75,7 @@ if (result.success) {
 **Arquivo:** `generator/bulk-generate.ts`  
 **Script npm:** `npm run bulk`
 
-Gera múltiplos sites a partir de uma lista de negócios, com delay entre cada geração para respeitar os rate limits da OpenAI.
+Gera múltiplos sites a partir de uma lista de negócios, com delay entre cada geração para respeitar os rate limits da Groq.
 
 ### Uso
 
@@ -133,7 +133,7 @@ O script inclui 8 negócios de demonstração no Rio de Janeiro:
 
 ### Delay entre Gerações
 
-O script aguarda **3 segundos** entre cada site para evitar erros de rate limit da OpenAI:
+O script aguarda **3 segundos** entre cada site para evitar erros de rate limit da Groq:
 
 ```typescript
 for (const lead of leads) {
@@ -203,7 +203,7 @@ Ambos os scripts precisam das variáveis de ambiente. Use um arquivo `.env` na r
 
 ```bash
 # Carrega automaticamente pelo dotenv no início do script
-OPENAI_API_KEY=sk-...
+GROQ_API_KEY=gsk_...
 MONGODB_URI=mongodb://localhost:27017/site-factory
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
 ```

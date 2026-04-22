@@ -1,5 +1,5 @@
 // ts-jest does not apply babel-jest's `mock*` variable hoisting exception.
-// Access the mock create fn via the OpenAI mock instance after module load.
+// Access the mock create fn via the Groq mock instance after module load.
 jest.mock('groq-sdk', () =>
   jest.fn().mockImplementation(() => ({
     chat: {
@@ -76,7 +76,7 @@ describe('agents/copywriter', () => {
   })
 
   describe('copywriterAgent', () => {
-    it('should return success with valid SiteContent when OpenAI responds correctly', async () => {
+    it('should return success with valid SiteContent when Groq responds correctly', async () => {
       getMockCreate().mockResolvedValueOnce({
         choices: [{ message: { content: validContentJSON } }],
       })
@@ -115,7 +115,7 @@ describe('agents/copywriter', () => {
       expect(result.data?.hero.cta).toBeTruthy()
     })
 
-    it('should handle OpenAI response wrapped in markdown code fence', async () => {
+    it('should handle Groq response wrapped in markdown code fence', async () => {
       getMockCreate().mockResolvedValueOnce({
         choices: [{ message: { content: `\`\`\`json\n${validContentJSON}\n\`\`\`` } }],
       })
@@ -126,8 +126,8 @@ describe('agents/copywriter', () => {
       expect(result.data).toBeDefined()
     })
 
-    it('should return success: false when OpenAI throws an error', async () => {
-      getMockCreate().mockRejectedValueOnce(new Error('OpenAI API unavailable'))
+    it('should return success: false when Groq throws an error', async () => {
+      getMockCreate().mockRejectedValueOnce(new Error('Groq API unavailable'))
 
       const result = await copywriterAgent(baseInput, basePlan)
 
@@ -135,7 +135,7 @@ describe('agents/copywriter', () => {
       expect(result.error).toBeDefined()
     })
 
-    it('should return success: false when OpenAI returns invalid JSON', async () => {
+    it('should return success: false when Groq returns invalid JSON', async () => {
       getMockCreate().mockResolvedValueOnce({
         choices: [{ message: { content: 'invalid {{{json' } }],
       })
@@ -160,7 +160,7 @@ describe('agents/copywriter', () => {
       expect(result.success).toBe(true)
     })
 
-    it('should handle null message content from OpenAI (uses "{}" fallback)', async () => {
+    it('should handle null message content from Groq (uses "{}" fallback)', async () => {
       getMockCreate().mockResolvedValueOnce({
         choices: [{ message: { content: null } }],
       })
@@ -172,7 +172,7 @@ describe('agents/copywriter', () => {
       expect(result.success).toBe(true)
     })
 
-    it('should call OpenAI with a prompt containing business name and niche', async () => {
+    it('should call Groq with a prompt containing business name and niche', async () => {
       getMockCreate().mockResolvedValueOnce({
         choices: [{ message: { content: validContentJSON } }],
       })

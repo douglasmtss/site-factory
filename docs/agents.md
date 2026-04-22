@@ -16,8 +16,8 @@ type AgentResult<T> = {
 
 | Agente | Arquivo | Usa IA? | Input | Output |
 |---|---|---|---|---|
-| Planner | `agents/planner.ts` | Sim (GPT-4o-mini) | `BusinessInput` | `SitePlan` |
-| Copywriter | `agents/copywriter.ts` | Sim (GPT-4o-mini) | `BusinessInput` + `SitePlan` | `SiteContent` |
+| Planner | `agents/planner.ts` | Sim (Groq llama-3.3-70b) | `BusinessInput` | `SitePlan` |
+| Copywriter | `agents/copywriter.ts` | Sim (Groq llama-3.3-70b) | `BusinessInput` + `SitePlan` | `SiteContent` |
 | UI | `agents/ui.ts` | Não | `SitePlan` | `SiteDesign` |
 | Code | `agents/code.ts` | Não | `SiteContent` + `SiteDesign` + `string` + `string` | `{ html, slug }` |
 | Deploy | `agents/deploy.ts` | Não | `html: string` + `slug: string` | `DeployResult` |
@@ -32,7 +32,7 @@ type AgentResult<T> = {
 ### O que faz
 
 1. Detecta o **nicho** do negócio via `detectNiche()` — busca palavras-chave no nome
-2. Chama GPT-4o-mini pedindo um JSON com estrutura do site
+2. Chama Groq (llama-3.3-70b-versatile) pedindo um JSON com estrutura do site
 3. Enriquece o resultado com dados locais (cores e seções por nicho) se a IA não retornou
 
 ### Detecção de Nicho
@@ -58,7 +58,7 @@ function detectNiche(businessInput: string): string {
 }
 ```
 
-### Prompt enviado ao GPT-4o-mini
+### Prompt enviado ao Groq (llama-3.3-70b-versatile)
 
 ```
 Você é um especialista em marketing digital para pequenos negócios brasileiros.
@@ -82,7 +82,7 @@ Retorne APENAS um JSON válido com esta estrutura:
 ### Parâmetros da chamada
 
 ```typescript
-model: 'gpt-4o-mini'
+model: 'llama-3.3-70b-versatile'
 temperature: 0.3    // baixa criatividade — queremos estrutura consistente
 max_tokens: 600
 ```
@@ -117,7 +117,7 @@ max_tokens: 600
 
 1. Importa instruções das skills de **SEO** e **Conversão**
 2. Monta um prompt rico com regras de copywriting
-3. Chama GPT-4o-mini pedindo um JSON com todo o texto do site
+3. Chama Groq (llama-3.3-70b-versatile) pedindo um JSON com todo o texto do site
 4. Faz strip de markdown fences (` ```json ... ``` `) antes de parsear
 
 ### Injeção de Skills no Prompt
@@ -140,7 +140,7 @@ Palavras-chave obrigatórias: ${keywords.join(', ')}
 ### Parâmetros da chamada
 
 ```typescript
-model: 'gpt-4o-mini'
+model: 'llama-3.3-70b-versatile'
 temperature: 0.7    // mais criatividade — queremos texto persuasivo variado
 max_tokens: 1200
 ```

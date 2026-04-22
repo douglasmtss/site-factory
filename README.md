@@ -41,7 +41,7 @@ E em menos de 2 minutos o sistema entrega um site completo, publicado na interne
 | **Next.js 15** | App principal, landing page, rotas dinâmicas |
 | **TypeScript** | Tipagem completa em todo o projeto |
 | **Tailwind CSS** | Estilização da landing page |
-| **OpenAI GPT-4o-mini** | Geração de conteúdo (Planner + Copywriter agents) |
+| **Groq (llama-3.3-70b-versatile)** | Geração de conteúdo (Planner + Copywriter agents) |
 | **MongoDB + Mongoose** | Persistência de sites e clientes |
 | **Telegraf** | Bot Telegram para criação via chat |
 | **Vercel API** | Deploy automático dos sites gerados |
@@ -158,7 +158,7 @@ Recebe o input do negócio e retorna um plano estruturado.
 ```
 
 ### 2. Copywriter Agent (`agents/copywriter.ts`)
-Usa GPT-4o-mini para gerar todo o conteúdo com foco em SEO local e conversão.
+Usa Groq (llama-3.3-70b-versatile) para gerar todo o conteúdo com foco em SEO local e conversão.
 
 **Output:** hero, sobre, serviços, CTAs, meta tags completas
 
@@ -261,7 +261,7 @@ Lista todos os sites gerados (últimos 100, ordenados por data).
 
 ```env
 # Obrigatório para geração de conteúdo
-OPENAI_API_KEY=sk-...
+GROQ_API_KEY=gsk_...
 
 # Bot Telegram (modo polling — npm run telegram)
 TELEGRAM_BOT_TOKEN=...
@@ -317,6 +317,6 @@ Requer MongoDB acessível e Node 20+.
 
 - Node.js 20+ (use `nvm use 20`)
 - MongoDB local ou Atlas (gratuito)
-- Chave OpenAI (GPT-4o-mini custa ~$0.0001 por site)
+- Chave Groq (gratuita em console.groq.com)
 - Token do bot Telegram (opcional)
 - Token Vercel (opcional, para deploy automático)
