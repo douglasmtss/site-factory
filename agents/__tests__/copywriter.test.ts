@@ -1,6 +1,6 @@
 // ts-jest does not apply babel-jest's `mock*` variable hoisting exception.
 // Access the mock create fn via the OpenAI mock instance after module load.
-jest.mock('openai', () =>
+jest.mock('groq-sdk', () =>
   jest.fn().mockImplementation(() => ({
     chat: {
       completions: {
@@ -10,13 +10,13 @@ jest.mock('openai', () =>
   }))
 )
 
-import OpenAI from 'openai'
+import Groq from 'groq-sdk'
 import { copywriterAgent } from '@/agents/copywriter'
 import type { BusinessInput, SitePlan } from '@/types'
 
-/** Returns the `create` mock from the OpenAI instance created when copywriter.ts loads */
+/** Returns the `create` mock from the Groq instance created when copywriter.ts loads */
 const getMockCreate = (): jest.Mock => {
-  const instance = (OpenAI as jest.Mock).mock.results[0]?.value
+  const instance = (Groq as jest.Mock).mock.results[0]?.value
   return instance?.chat?.completions?.create as jest.Mock
 }
 
@@ -187,25 +187,25 @@ describe('agents/copywriter', () => {
 })
 
 describe('agents/copywriter — module initialization branch', () => {
-  it('should pass OPENAI_API_KEY directly when the env var is set (covers ?? left branch)', () => {
-    const original = process.env.OPENAI_API_KEY
-    process.env.OPENAI_API_KEY = 'real-test-key'
+  it('should pass GROQ_API_KEY directly when the env var is set (covers ?? left branch)', () => {
+    const original = process.env.GROQ_API_KEY
+    process.env.GROQ_API_KEY = 'real-test-key'
 
     jest.resetModules()
-    // Re-register the OpenAI mock for the fresh module load
-    jest.mock('openai', () => jest.fn().mockImplementation(() => ({
+    // Re-register the Groq mock for the fresh module load
+    jest.mock('groq-sdk', () => jest.fn().mockImplementation(() => ({
       chat: { completions: { create: jest.fn() } },
     })))
 
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const OpenAIFresh = require('openai') as jest.Mock
-    // Importing the agent forces module-level `new OpenAI(...)` to run
+    const GroqFresh = require('groq-sdk') as jest.Mock
+    // Importing the agent forces module-level `new Groq(...)` to run
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     require('@/agents/copywriter')
 
-    const callArg = OpenAIFresh.mock.calls[0]?.[0] as { apiKey?: string } | undefined
+    const callArg = GroqFresh.mock.calls[0]?.[0] as { apiKey?: string } | undefined
     expect(callArg?.apiKey).toBe('real-test-key')
 
-    process.env.OPENAI_API_KEY = original
+    process.env.GROQ_API_KEY = original
   })
 })

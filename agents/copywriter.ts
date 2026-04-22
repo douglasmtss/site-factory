@@ -1,14 +1,14 @@
 // Agent: Copywriter
 // Gera todo o conteúdo do site com foco em conversão e SEO local
 
-import OpenAI from 'openai'
+import Groq from 'groq-sdk'
 import type { BusinessInput, SitePlan, SiteContent, AgentResult } from '@/types'
 import { buildSeoPromptInstructions, buildSeoKeywords } from '@/skills/seo'
 import { buildConversionPromptInstructions } from '@/skills/conversion'
 
 // apiKey falls back to a placeholder so the constructor doesn't throw during
 // Next.js build-time module evaluation when the env var is not set.
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY ?? 'build-placeholder' })
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY ?? 'build-placeholder' })
 
 export async function copywriterAgent(
   input: BusinessInput,
@@ -84,8 +84,8 @@ Retorne APENAS um JSON válido no formato abaixo (sem texto extra, sem markdown)
 }
 `.trim()
 
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+    const completion = await groq.chat.completions.create({
+      model: 'llama-3.3-70b-versatile',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.7,
       max_tokens: 1200,
