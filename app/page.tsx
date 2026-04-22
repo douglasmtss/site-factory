@@ -90,15 +90,12 @@ export default function HomePage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-14">
-            <a
-              href={WA_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/criar"
               className="inline-flex items-center gap-3 bg-green-500 hover:bg-green-400 text-white font-bold text-lg px-8 py-4 rounded-full shadow-lg shadow-green-500/30 transition-all hover:-translate-y-1"
             >
-              <WhatsAppIcon />
-              Criar meu site agora — R$97
-            </a>
+              🚀 Criar meu site agora
+            </Link>
             <a
               href="#como-funciona"
               className="inline-flex items-center gap-2 border border-white/30 text-white hover:bg-white/10 font-semibold px-8 py-4 rounded-full transition-all"
@@ -230,14 +227,12 @@ export default function HomePage() {
                 <li>✅ SEO local</li>
                 <li>✅ Hospedagem por 1 ano</li>
               </ul>
-              <a
-                href={WA_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block w-full bg-gray-900 text-white font-bold py-3 rounded-xl hover:bg-gray-700 transition-colors"
+              <Link
+                href="/criar"
+                className="block w-full bg-gray-900 text-white font-bold py-3 rounded-xl hover:bg-gray-700 transition-colors text-center"
               >
                 Quero esse plano
-              </a>
+              </Link>
             </div>
             {/* Plano mensal */}
             <div className="bg-green-500 rounded-2xl border-2 border-green-500 p-8 text-center relative overflow-hidden">
@@ -254,14 +249,12 @@ export default function HomePage() {
                 <li>✅ SEO local</li>
                 <li>✅ Atualizações gratuitas</li>
               </ul>
-              <a
-                href={WA_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block w-full bg-white text-green-600 font-bold py-3 rounded-xl hover:bg-green-50 transition-colors"
+              <Link
+                href="/criar"
+                className="block w-full bg-white text-green-600 font-bold py-3 rounded-xl hover:bg-green-50 transition-colors text-center"
               >
                 Assinar agora
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -277,15 +270,12 @@ export default function HomePage() {
             Criamos seu site profissional em menos de 2 minutos.
             Sem complicação, sem precisar de técnico.
           </p>
-          <a
-            href={WA_LINK}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/criar"
             className="inline-flex items-center gap-3 bg-white text-green-600 font-bold text-lg px-10 py-5 rounded-full shadow-lg hover:-translate-y-1 transition-all"
           >
-            <WhatsAppIcon className="text-green-500" />
-            Criar meu site agora — R$97
-          </a>
+            🚀 Criar meu site agora
+          </Link>
           <p className="mt-6 text-green-100 text-sm">
             Resposta em menos de 5 minutos · Sem burocracia
           </p>
